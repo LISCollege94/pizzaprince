@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { MapPin, Phone, Clock, Navigation, ExternalLink, Flame, Compass } from 'lucide-react';
 import { RESTAURANT_LOCATION } from '../data/karachiAreas';
 import { useCart } from '../context/CartContext';
+import { ASSETS } from '../constants/assets';
 
 export const RestaurantInfoSection: React.FC = () => {
   const { setIsTrackingModalOpen } = useCart();
@@ -21,7 +22,10 @@ export const RestaurantInfoSection: React.FC = () => {
           {/* New Pristine Pizza Prince Widescreen Artwork */}
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-[#fbdad2] dark:border-[#3b171f] shadow-xl bg-stone-900 group">
             <img
-              src="/public/assets/aistudio/Gemini_Generated_Image_2pcgg62pcgg62pcg_da13fa02.jpg"
+              src={ASSETS.banner}
+              onError={(e) => {
+                e.currentTarget.src = '/assets/aistudio/Gemini_Generated_Image_2pcgg62pcgg62pcg_da13fa02.jpg';
+              }}
               alt="Pizza Prince Official Widescreen Signboard Artwork"
               className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
               referrerPolicy="no-referrer"
@@ -39,7 +43,7 @@ export const RestaurantInfoSection: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div className="relative aspect-[16/10] rounded-xl overflow-hidden border border-[#fbdad2] dark:border-[#3b171f] shadow bg-stone-900">
               <img
-                src="/src/assets/images/restaurant_counter_kitchen_1794413391861.jpg"
+                src={ASSETS.restaurant}
                 alt="Pizza Prince Stone Oven Kitchen Counter"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
@@ -52,7 +56,10 @@ export const RestaurantInfoSection: React.FC = () => {
 
             <div className="p-3 sm:p-4 rounded-xl bg-white dark:bg-[#170b0e] border border-[#fbdad2] dark:border-[#3b171f] flex items-center gap-3">
               <img
-                src="/public/assets/aistudio/Logo_dc615caa.jpg"
+                src={ASSETS.logo}
+                onError={(e) => {
+                  e.currentTarget.src = '/assets/aistudio/Logo_dc615caa.jpg';
+                }}
                 alt="Pizza Prince Circular Official Emblem"
                 className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-2 ring-amber-400 shrink-0 shadow-md"
               />

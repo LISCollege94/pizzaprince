@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { ShoppingBag, Moon, Sun, MapPin, Phone, Menu as MenuIcon, X, Compass } from 'lucide-react';
 import { RESTAURANT_LOCATION } from '../data/karachiAreas';
+import { ASSETS } from '../constants/assets';
 
 export const Navbar: React.FC = () => {
   const { totalItemsCount, setIsCartOpen, selectedArea, setIsLocationModalOpen, setIsTrackingModalOpen, cartBump } = useCart();
@@ -22,7 +23,10 @@ export const Navbar: React.FC = () => {
           >
             {/* User-uploaded official circular Pizza Prince Logo */}
             <img
-              src="/public/assets/aistudio/Logo_dc615caa.jpg"
+              src={ASSETS.logo}
+              onError={(e) => {
+                e.currentTarget.src = '/assets/aistudio/Logo_dc615caa.jpg';
+              }}
               alt="Pizza Prince Logo"
               className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-amber-400 shadow-md group-hover:scale-105 transition-transform shrink-0"
             />
@@ -99,6 +103,9 @@ export const Navbar: React.FC = () => {
             >
               <img
                 src={user.avatar}
+                onError={(e) => {
+                  e.currentTarget.src = ASSETS.logo;
+                }}
                 alt={user.name}
                 className="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg object-cover ring-1 ring-red-600"
               />

@@ -94,6 +94,9 @@ export const CartDrawer: React.FC = () => {
               >
                 <img
                   src={item.menuItem.image}
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/pizza.jpg';
+                  }}
                   alt={item.menuItem.name}
                   className="w-16 h-16 rounded-lg object-cover shrink-0 bg-stone-950"
                   referrerPolicy="no-referrer"

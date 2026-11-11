@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { useCart } from '../context/CartContext';
 import { MenuItem } from '../types';
 import { Sparkles, Plus, Tag, Check, ArrowRight } from 'lucide-react';
+import { ASSETS } from '../constants/assets';
 
 interface DealItem {
   id: string;
@@ -23,7 +24,7 @@ const DEALS: DealItem[] = [
     originalPrice: 3350,
     discountBadge: 'Save Rs. 460',
     description: 'The ultimate royal family gathering deal. Includes our signature stuffed Crown Crust Pizza and full sides.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     includes: [
       '1x Large 13" Crown Crust Tikka Pizza',
       '1x Prince Zinger Supreme Burger',
@@ -38,7 +39,7 @@ const DEALS: DealItem[] = [
     originalPrice: 1420,
     discountBadge: 'Save Rs. 230',
     description: 'Two golden crispy zinger burgers paired with fresh crinkle fries and ice-cold soft drink cans.',
-    image: '/src/assets/images/crispy_zinger_burger_1794413390848.jpg',
+    image: ASSETS.burger,
     includes: [
       '2x Prince Supreme Zinger Burgers',
       '1x Jumbo Seasoned Crinkle Fries',
@@ -53,7 +54,7 @@ const DEALS: DealItem[] = [
     originalPrice: 1750,
     discountBadge: 'Save Rs. 260',
     description: 'Crispy pressure-fried chicken broast quarters combined with spicy glazed buffalo chicken wings.',
-    image: '/src/assets/images/loaded_cheesy_fries_1794413391502.jpg',
+    image: ASSETS.fries,
     includes: [
       '4x Golden Fried Broast Pieces (Half)',
       '6x Spicy Buffalo Crispy Wings',
@@ -127,6 +128,9 @@ export const DealsSection: React.FC = () => {
             <div className="relative aspect-[16/10] w-full overflow-hidden bg-stone-950">
               <img
                 src={deal.image}
+                onError={(e) => {
+                  e.currentTarget.src = '/images/pizza.jpg';
+                }}
                 alt={deal.name}
                 className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
                 referrerPolicy="no-referrer"

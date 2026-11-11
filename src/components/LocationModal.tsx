@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext';
 import { KARACHI_AREAS, RESTAURANT_LOCATION, getDistanceInKm, calculateDeliveryFee, calculateEstimatedMinutes } from '../data/karachiAreas';
 import { MapPin, Navigation, Check, X, Search, ShieldAlert } from 'lucide-react';
 import { KarachiArea } from '../types';
+import { ASSETS } from '../constants/assets';
 
 export const LocationModal: React.FC = () => {
   const {
@@ -98,7 +99,10 @@ export const LocationModal: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <img
-                src="/public/assets/aistudio/Logo_dc615caa.jpg"
+                src={ASSETS.logo}
+                onError={(e) => {
+                  e.currentTarget.src = '/assets/aistudio/Logo_dc615caa.jpg';
+                }}
                 alt="Pizza Prince Logo"
                 className="w-10 h-10 rounded-full object-cover ring-2 ring-amber-400 shrink-0 shadow-md"
               />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { RESTAURANT_LOCATION } from '../data/karachiAreas';
 import { MapPin, Phone, Clock, ArrowUp, Navigation } from 'lucide-react';
+import { ASSETS } from '../constants/assets';
 
 export const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -15,7 +16,10 @@ export const Footer: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
               <img
-                src="/public/assets/aistudio/Logo_dc615caa.jpg"
+                src={ASSETS.logo}
+                onError={(e) => {
+                  e.currentTarget.src = '/assets/aistudio/Logo_dc615caa.jpg';
+                }}
                 alt="Pizza Prince Logo"
                 className="w-10 h-10 rounded-full object-cover ring-2 ring-amber-400 shrink-0 shadow-md"
               />

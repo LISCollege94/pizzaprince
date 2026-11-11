@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, MapPin, Phone, Clock, ShieldCheck, Flame, Compass } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { RESTAURANT_LOCATION } from '../data/karachiAreas';
+import { ASSETS } from '../constants/assets';
 
 interface SlideItem {
   id: string;
@@ -19,7 +20,7 @@ const SLIDES: SlideItem[] = [
     title: 'Welcome to Pizza Prince',
     subtitle: 'The Royal Artisanal Taste of Surjani Town',
     tagline: 'Handcrafted crown crust pizzas, double smash zingers, and loaded fries.',
-    image: '/public/assets/aistudio/Gemini_Generated_Image_2pcgg62pcgg62pcg_da13fa02.jpg',
+    image: ASSETS.banner,
     badge: 'Official Pizza Prince Banner',
   },
   {
@@ -27,7 +28,7 @@ const SLIDES: SlideItem[] = [
     title: 'Handcrafted Crown Crust Pizza',
     subtitle: 'Golden Cheese Pockets & Smoked Tikka Chunks',
     tagline: 'Cheese stuffed crown pockets with bubbling mozzarella, bell peppers, and royal spices.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     badge: 'Signature Specialty',
   },
   {
@@ -35,7 +36,7 @@ const SLIDES: SlideItem[] = [
     title: 'Prince Zinger Supreme Burger',
     subtitle: 'Extra Crunchy Golden Chicken Fillet',
     tagline: 'Crispy fried chicken with melting cheddar, toasted brioche bun, and secret garlic mayo.',
-    image: '/src/assets/images/crispy_zinger_burger_1794413390848.jpg',
+    image: ASSETS.burger,
     badge: 'Fast Food Favorite',
   },
   {
@@ -43,7 +44,7 @@ const SLIDES: SlideItem[] = [
     title: 'Stone Oven & Live Prep Counter',
     subtitle: 'Hygiene & Artisanal Precision in Karachi',
     tagline: 'Visit our counter at ST 1, Sector 1 Surjani Town or enjoy express doorstep delivery.',
-    image: '/src/assets/images/restaurant_counter_kitchen_1794413391861.jpg',
+    image: ASSETS.restaurant,
     badge: 'Fresh From Oven',
   },
   {
@@ -51,7 +52,7 @@ const SLIDES: SlideItem[] = [
     title: 'Loaded Chicken Tikka Fries',
     subtitle: 'Crinkle Cut Fries & Molten Cheddar',
     tagline: 'Golden fries layered with spiced chicken chunks, jalapeños, and signature garlic herb cream.',
-    image: '/src/assets/images/loaded_cheesy_fries_1794413391502.jpg',
+    image: ASSETS.fries,
     badge: 'Crispy Side Platter',
   },
 ];
@@ -85,6 +86,9 @@ export const HeroSlider: React.FC = () => {
           >
             <img
               src={slide.image}
+              onError={(e) => {
+                e.currentTarget.src = '/images/banner.jpg';
+              }}
               alt={slide.title}
               className="w-full h-full object-cover object-center"
               referrerPolicy="no-referrer"

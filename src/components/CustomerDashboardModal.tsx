@@ -38,6 +38,9 @@ export const CustomerDashboardModal: React.FC = () => {
           <div className="flex items-center gap-4">
             <img
               src={user.avatar}
+              onError={(e) => {
+                e.currentTarget.src = '/images/logo.jpg';
+              }}
               alt={user.name}
               className="w-14 h-14 rounded-2xl object-cover ring-2 ring-amber-400 shadow-md"
             />

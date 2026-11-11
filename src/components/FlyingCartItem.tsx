@@ -65,6 +65,9 @@ export const FlyingCartItem: React.FC = () => {
           <div className="w-22 h-22 rounded-full overflow-hidden shadow-2xl border-4 border-amber-400 bg-red-950 ring-4 ring-red-600/60 shadow-amber-500/50">
             <img
               src={flyingItem.image}
+              onError={(e) => {
+                e.currentTarget.src = '/images/pizza.jpg';
+              }}
               alt={flyingItem.name}
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"

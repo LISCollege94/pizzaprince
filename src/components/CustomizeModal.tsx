@@ -56,6 +56,9 @@ export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose })
         <div className="relative h-48 sm:h-56 w-full shrink-0 overflow-hidden bg-stone-950">
           <img
             src={item.image}
+            onError={(e) => {
+              e.currentTarget.src = '/images/pizza.jpg';
+            }}
             alt={item.name}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"

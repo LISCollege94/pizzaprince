@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CartItem, MenuItem, KarachiArea, Order } from '../types';
 import { KARACHI_AREAS, calculateDeliveryFee, calculateEstimatedMinutes, RESTAURANT_LOCATION } from '../data/karachiAreas';
+import { ASSETS } from '../constants/assets';
 
 interface FlyingAnimationState {
   id: string;
@@ -140,7 +141,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
               category: 'pizza',
               price: 1350,
               description: 'Crown crust stuffed pockets with chicken tikka',
-              image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+              image: ASSETS.pizza,
             },
             selectedSize: { name: 'Medium 10"', price: 1350 },
             selectedSpice: 'Spicy',
@@ -156,7 +157,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
               category: 'loaded-fries',
               price: 550,
               description: 'Crinkle fries loaded with cheddar and tikka',
-              image: '/src/assets/images/loaded_cheesy_fries_1794413391502.jpg',
+              image: ASSETS.fries,
             },
             quantity: 1,
             unitPrice: 550,

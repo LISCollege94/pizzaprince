@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { X, Check, ShieldCheck } from 'lucide-react';
+import { ASSETS } from '../constants/assets';
 
 export const GoogleAuthModal: React.FC = () => {
   const { isAuthModalOpen, setIsAuthModalOpen, signInWithGoogle } = useAuth();
@@ -31,7 +32,10 @@ export const GoogleAuthModal: React.FC = () => {
           </button>
 
           <img
-            src="/public/assets/aistudio/Logo_dc615caa.jpg"
+            src={ASSETS.logo}
+            onError={(e) => {
+              e.currentTarget.src = '/assets/aistudio/Logo_dc615caa.jpg';
+            }}
             alt="Pizza Prince Logo"
             className="w-16 h-16 mx-auto rounded-full object-cover ring-4 ring-amber-400 shadow-xl mb-3"
           />

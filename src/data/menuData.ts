@@ -1,4 +1,5 @@
 import { MenuItem } from '../types';
+import { ASSETS } from '../constants/assets';
 
 export const MENU_ITEMS: MenuItem[] = [
   // Pizzas
@@ -9,7 +10,7 @@ export const MENU_ITEMS: MenuItem[] = [
     price: 1350,
     originalPrice: 1550,
     description: 'Our signature royal pizza with cheese-stuffed golden crown crust pockets, smoked chicken tikka chunks, onions, and melted mozzarella.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     tag: "Chef's Special",
     isPopular: true,
     sizes: [
@@ -33,7 +34,7 @@ export const MENU_ITEMS: MenuItem[] = [
     price: 1290,
     originalPrice: 1450,
     description: 'Tender fajita marinated chicken breast strips, crisp green bell peppers, sweet caramelized onions, and seasoned tomato glaze.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     tag: 'Popular',
     isPopular: true,
     sizes: [
@@ -55,7 +56,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'pizza',
     price: 1390,
     description: 'Melt-in-mouth chicken malai boti infused with rich cream sauce, white cheese blend, capsicum, and aromatic herbs.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     tag: 'Rich & Creamy',
     isPopular: true,
     sizes: [
@@ -78,7 +79,7 @@ export const MENU_ITEMS: MenuItem[] = [
     price: 1450,
     originalPrice: 1650,
     description: 'Generously layered with crisp seasoned beef pepperoni slices, rich marinara sauce, dried oregano, and triple stretchy mozzarella.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     tag: 'Classic',
     sizes: [
       { name: 'Regular 7"', price: 920 },
@@ -102,7 +103,7 @@ export const MENU_ITEMS: MenuItem[] = [
     price: 520,
     originalPrice: 590,
     description: 'Extra-crispy battered golden chicken thigh fillet, melted cheddar cheese slice, fresh lettuce, and our secret recipe spicy sauce on a toasted brioche bun.',
-    image: '/src/assets/images/crispy_zinger_burger_1794413390848.jpg',
+    image: ASSETS.burger,
     tag: 'Bestseller',
     isPopular: true,
     sizes: [
@@ -123,7 +124,7 @@ export const MENU_ITEMS: MenuItem[] = [
     price: 680,
     originalPrice: 750,
     description: 'Two smashed prime beef patties seared with caramelized sweet onions, American cheese, gherkins, and house smokey BBQ glaze.',
-    image: '/src/assets/images/crispy_zinger_burger_1794413390848.jpg',
+    image: ASSETS.burger,
     tag: 'Juicy Beef',
     isPopular: true,
     sizes: [
@@ -143,7 +144,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'burgers',
     price: 490,
     description: 'Char-grilled herb-marinated chicken breast, crisp iceberg lettuce, sliced tomatoes, and garlic herb aioli sauce.',
-    image: '/src/assets/images/crispy_zinger_burger_1794413390848.jpg',
+    image: ASSETS.burger,
     sizes: [
       { name: 'Single Grilled Breast', price: 490 },
       { name: 'Double Grilled Delight', price: 720 },
@@ -162,7 +163,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'crispy-chicken',
     price: 480,
     description: 'Golden, crispy, and juicy fried chicken pieces pressure-cooked to perfection, served with French fries, toasted bun, and spicy garlic sauce.',
-    image: '/src/assets/images/crispy_zinger_burger_1794413390848.jpg',
+    image: ASSETS.burger,
     tag: 'Crispy & Juicy',
     isPopular: true,
     sizes: [
@@ -183,7 +184,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'crispy-chicken',
     price: 440,
     description: 'Crunchy battered chicken wings tossed in tangy cayenne pepper glaze and garnished with toasted sesame seeds.',
-    image: '/src/assets/images/loaded_cheesy_fries_1794413391502.jpg',
+    image: ASSETS.fries,
     sizes: [
       { name: '6 Pieces', price: 440 },
       { name: '10 Pieces', price: 690 },
@@ -202,7 +203,7 @@ export const MENU_ITEMS: MenuItem[] = [
     price: 550,
     originalPrice: 620,
     description: 'Jumbo platter of seasoned crinkle-cut fries topped with juicy chicken tikka chunks, melted cheddar cheese sauce, jalapeños, and garlic herb drizzle.',
-    image: '/src/assets/images/loaded_cheesy_fries_1794413391502.jpg',
+    image: ASSETS.fries,
     tag: 'Crowd Favorite',
     isPopular: true,
     sizes: [
@@ -222,7 +223,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'loaded-fries',
     price: 390,
     description: 'Golden crinkle fries smothered in warm velvety cheese sauce and spicy diced jalapeño peppers with smoked paprika.',
-    image: '/src/assets/images/loaded_cheesy_fries_1794413391502.jpg',
+    image: ASSETS.fries,
     sizes: [
       { name: 'Standard Box', price: 390 },
       { name: 'Large Box', price: 590 },
@@ -239,7 +240,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'rolls',
     price: 320,
     description: 'Crispy fried chicken zinger strip wrapped in a flaky golden fried paratha with shredded lettuce, diced onions, and garlic mayo dressing.',
-    image: '/src/assets/images/crispy_zinger_burger_1794413390848.jpg',
+    image: ASSETS.burger,
     isPopular: true,
     sizes: [
       { name: 'Single Paratha Roll', price: 320 },
@@ -257,7 +258,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'rolls',
     price: 340,
     description: 'Charcoal-grilled tender boneless chicken malai boti rolled in a hot crisp paratha with onion rings and smooth mint raita.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     sizes: [
       { name: 'Single Paratha Roll', price: 340 },
       { name: 'Double Meat Roll', price: 470 },
@@ -274,7 +275,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'drinks',
     price: 220,
     description: 'Refreshing blended fresh mint leaves, squeezed lemon juice, black salt, and sparkling ice soda.',
-    image: '/src/assets/images/loaded_cheesy_fries_1794413391502.jpg',
+    image: ASSETS.fries,
     tag: 'Refreshing',
     sizes: [
       { name: 'Regular Glass 350ml', price: 220 },
@@ -287,7 +288,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'drinks',
     price: 130,
     description: 'Ice-cold carbonated beverage of your choice served with fresh ice.',
-    image: '/src/assets/images/hero_crown_crust_pizza_1794413390016.jpg',
+    image: ASSETS.pizza,
     sizes: [
       { name: 'Regular 345ml Can / Bottle', price: 130 },
       { name: '1.5 Litre Family Bottle', price: 260 },
@@ -299,7 +300,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'drinks',
     price: 390,
     description: 'Thick creamy milkshake whipped with Belgian chocolate ice cream, chocolate syrup drizzle, and chocolate shavings.',
-    image: '/src/assets/images/restaurant_counter_kitchen_1794413391861.jpg',
+    image: ASSETS.restaurant,
     sizes: [
       { name: 'Regular 400ml', price: 390 },
     ],
