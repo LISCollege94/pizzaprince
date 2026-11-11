@@ -1,0 +1,8 @@
+{
+  "name": "Pizza Prince - Artisanal Pizza & Fast Food",
+  "description": "Official online ordering website for Pizza Prince in Surjani Town, Karachi. Features artisanal pizzas, crispy zinger burgers, loaded fries, live delivery radius calculation, cash on delivery, and live order tracking.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
