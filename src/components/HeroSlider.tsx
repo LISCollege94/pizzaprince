@@ -93,9 +93,9 @@ export const HeroSlider: React.FC = () => {
               className="w-full h-full object-cover object-center"
               referrerPolicy="no-referrer"
             />
-            {/* Scrim Overlay adjusting dynamically for Creamy Red light mode and Obsidian dark mode */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#fff7f5] via-[#fff7f5]/80 to-[#fff7f5]/30 dark:from-[#0d0608] dark:via-[#0d0608]/75 dark:to-[#0d0608]/50 transition-colors duration-300" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#fff7f5]/95 via-[#fff7f5]/75 to-transparent dark:from-[#0d0608]/95 dark:via-[#0d0608]/75 dark:to-transparent transition-colors duration-300" />
+            {/* Scrim Overlay adjusting dynamically - reduced by 25% for high image visibility & vibrant food display */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#fff7f5] via-[#fff7f5]/40 to-transparent dark:from-[#0d0608] dark:via-[#0d0608]/40 dark:to-transparent transition-colors duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#fff7f5]/80 via-[#fff7f5]/40 to-transparent dark:from-[#0d0608]/80 dark:via-[#0d0608]/40 dark:to-transparent transition-colors duration-300" />
           </motion.div>
         </AnimatePresence>
       </div>
@@ -110,7 +110,7 @@ export const HeroSlider: React.FC = () => {
               <span>ST 1, Sector 1 Surjani Town</span>
             </span>
             <span className="hidden xs:inline text-stone-400">·</span>
-            <span className="text-[#522730] dark:text-[#f4cdd4]">Express Delivery from 4K Chowrangi</span>
+            <span className="text-[#522730] dark:text-[#f4cdd4]">Express Delivery Across Karachi</span>
           </div>
 
           {/* Changing Animated Headline and Subtitle (Loops every 2 sec) */}
@@ -218,7 +218,7 @@ export const HeroSlider: React.FC = () => {
             <span aria-hidden="true" className="text-stone-400 dark:text-stone-700">·</span>
             <div className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
-              <span>4K Chowrangi Base: Rs. 100</span>
+              <span>Doorstep Express Delivery</span>
             </div>
           </div>
         </div>

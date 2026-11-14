@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { RESTAURANT_LOCATION } from '../data/karachiAreas';
+import { formatPrice } from '../utils/format';
 import { X, MapPin, Phone, User, CheckCircle2, MessageCircle, AlertCircle } from 'lucide-react';
 import { ASSETS } from '../constants/assets';
 
@@ -66,7 +67,7 @@ export const CheckoutModal: React.FC = () => {
       const itemsList = createdOrder.items
         .map(
           (i, idx) =>
-            `${idx + 1}. *${i.menuItem.name}* (${i.selectedSize?.name || 'Standard'}) x ${i.quantity} = Rs. ${i.totalPrice}${
+            `${idx + 1}. *${i.menuItem.name}* (${i.selectedSize?.name || 'Standard'}) x ${i.quantity} = Rs. ${formatPrice(i.totalPrice)}${
               i.selectedSpice ? ` [Spice: ${i.selectedSpice}]` : ''
             }`
         )
@@ -80,10 +81,10 @@ export const CheckoutModal: React.FC = () => {
         `*Area:* ${createdOrder.deliveryArea}\n` +
         `*Distance from Surjani ST 1:* ${createdOrder.distanceKm} km\n\n` +
         `*Items Ordered:*\n${itemsList}\n\n` +
-        `*Subtotal:* Rs. ${createdOrder.subtotal}\n` +
-        `*Delivery Fee:* Rs. ${createdOrder.deliveryFee}\n` +
-        (createdOrder.discount > 0 ? `*Discount:* -Rs. ${createdOrder.discount}\n` : '') +
-        `*Total Amount:* Rs. ${createdOrder.total}\n` +
+        `*Subtotal:* Rs. ${formatPrice(createdOrder.subtotal)}\n` +
+        `*Delivery Fee:* Rs. ${formatPrice(createdOrder.deliveryFee)}\n` +
+        (createdOrder.discount > 0 ? `*Discount:* -Rs. ${formatPrice(createdOrder.discount)}\n` : '') +
+        `*Total Amount:* Rs. ${formatPrice(createdOrder.total)}\n` +
         `*Payment Method:* ${createdOrder.paymentMethod}\n` +
         (notes ? `*Special Notes:* ${notes}\n` : '') +
         `\nThank you for choosing Pizza Prince! 🍕`;
@@ -189,14 +190,14 @@ export const CheckoutModal: React.FC = () => {
               <span className="font-bold text-[#1f0b0f] dark:text-white tabular-nums">~{effectiveDistance} km</span>
             </div>
             <div className="flex items-center justify-between text-xs text-[#804a55] dark:text-stone-400">
-              <span>Delivery Rate Rule:</span>
+              <span>Delivery Fee:</span>
               <span className="text-[#522730] dark:text-stone-300 text-[11px]">
-                4K Chowrangi Base (Rs. 100) + Distance Scale
+                Calculated by distance from kitchen
               </span>
             </div>
             <div className="pt-2 border-t border-[#fbdad2]/60 dark:border-[#3b171f]/80 flex items-center justify-between text-xs font-bold">
               <span className="text-[#1f0b0f] dark:text-stone-300">Calculated Delivery Fee:</span>
-              <span className="text-red-700 dark:text-amber-400 tabular-nums">Rs. {deliveryFee}</span>
+              <span className="text-red-700 dark:text-amber-400 tabular-nums">Rs. {formatPrice(deliveryFee)}</span>
             </div>
           </div>
 
@@ -250,21 +251,21 @@ export const CheckoutModal: React.FC = () => {
           <div className="p-4 rounded-xl bg-[#fff0ec] dark:bg-[#0d0608]/90 border border-[#fbdad2] dark:border-[#3b171f] text-xs space-y-1.5">
             <div className="flex justify-between text-[#522730] dark:text-stone-400">
               <span>Items Total ({cart.reduce((a, b) => a + b.quantity, 0)} items):</span>
-              <span className="text-[#1f0b0f] dark:text-stone-200 font-semibold tabular-nums">Rs. {subtotal}</span>
+              <span className="text-[#1f0b0f] dark:text-stone-200 font-semibold tabular-nums">Rs. {formatPrice(subtotal)}</span>
             </div>
             <div className="flex justify-between text-[#522730] dark:text-stone-400">
               <span>Delivery Charges ({effectiveDistance} km):</span>
-              <span className="text-[#1f0b0f] dark:text-stone-200 font-semibold tabular-nums">Rs. {deliveryFee}</span>
+              <span className="text-[#1f0b0f] dark:text-stone-200 font-semibold tabular-nums">Rs. {formatPrice(deliveryFee)}</span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
                 <span>Family Promotion Discount:</span>
-                <span className="tabular-nums">-Rs. {discount}</span>
+                <span className="tabular-nums">-Rs. {formatPrice(discount)}</span>
               </div>
             )}
             <div className="pt-2 border-t border-[#fbdad2] dark:border-[#3b171f] flex justify-between text-sm font-black text-[#1f0b0f] dark:text-white">
               <span>Total Payable Amount:</span>
-              <span className="text-red-700 dark:text-amber-400 text-base tabular-nums">Rs. {total}</span>
+              <span className="text-red-700 dark:text-amber-400 text-base tabular-nums">Rs. {formatPrice(total)}</span>
             </div>
           </div>
         </div>

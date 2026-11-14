@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { MapPin, Phone, Clock, Navigation, ExternalLink, Flame, Compass } from 'lucide-react';
 import { RESTAURANT_LOCATION } from '../data/karachiAreas';
 import { useCart } from '../context/CartContext';
@@ -10,13 +9,7 @@ export const RestaurantInfoSection: React.FC = () => {
 
   return (
     <section id="restaurant-story" className="py-12 sm:py-16 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#fbdad2] dark:border-[#3b171f] overflow-hidden">
-      <motion.div
-        initial={{ opacity: 0, y: 35 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center"
-      >
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
         {/* Left: Real Counter & New High-Res Artwork Showcase */}
         <div className="lg:col-span-6 space-y-4">
           {/* New Pristine Pizza Prince Widescreen Artwork */}
@@ -158,7 +151,7 @@ export const RestaurantInfoSection: React.FC = () => {
             </a>
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

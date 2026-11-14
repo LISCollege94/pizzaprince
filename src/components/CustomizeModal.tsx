@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { MenuItem } from '../types';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../utils/format';
 import { X, Plus, Minus, Check, Flame } from 'lucide-react';
 
 interface CustomizeModalProps {
@@ -8,10 +10,8 @@ interface CustomizeModalProps {
   onClose: () => void;
 }
 
-export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose }) => {
+const CustomizeModalInner: React.FC<{ item: MenuItem; onClose: () => void }> = ({ item, onClose }) => {
   const { addToCart } = useCart();
-
-  if (!item) return null;
 
   const [selectedSize, setSelectedSize] = useState(
     item.sizes && item.sizes.length > 0 ? item.sizes[1] || item.sizes[0] : undefined
@@ -80,7 +80,7 @@ export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose })
         </div>
 
         {/* Scrollable Configuration Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1">
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1">
           <p className="text-xs text-[#522730] dark:text-stone-400 leading-relaxed">{item.description}</p>
 
           {/* Sizes Option */}
@@ -92,21 +92,30 @@ export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose })
                 </label>
                 <span className="text-[11px] text-[#804a55] dark:text-stone-500">Required</span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {item.sizes.map((s) => (
-                  <button
-                    key={s.name}
-                    onClick={() => setSelectedSize(s)}
-                    className={`flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all ${
-                      selectedSize?.name === s.name
-                        ? 'bg-rose-100 dark:bg-red-950/70 border-red-500 text-red-950 dark:text-white shadow-xs font-bold'
-                        : 'bg-white dark:bg-[#0d0608] border-[#fbdad2] dark:border-[#3b171f] text-[#522730] dark:text-stone-300 hover:border-red-400'
-                    }`}
-                  >
-                    <span>{s.name}</span>
-                    <span className="text-red-700 dark:text-amber-400 font-bold tabular-nums">Rs. {s.price}</span>
-                  </button>
-                ))}
+              <div className="grid grid-cols-2 gap-2.5">
+                {item.sizes.map((s) => {
+                  const isSelected = selectedSize?.name === s.name;
+                  return (
+                    <motion.button
+                      key={s.name}
+                      type="button"
+                      onClick={() => setSelectedSize(s)}
+                      whileTap={{ scale: 0.96 }}
+                      animate={{ scale: isSelected ? 1.02 : 1 }}
+                      transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+                      className={`flex items-center justify-between gap-2 p-3 rounded-xl border text-xs font-semibold transition-colors duration-200 ${
+                        isSelected
+                          ? 'bg-rose-100 dark:bg-red-950/75 border-red-500 text-red-950 dark:text-white shadow-sm ring-1 ring-red-500/40 font-bold'
+                          : 'bg-white dark:bg-[#0d0608] border-[#fbdad2] dark:border-[#3b171f] text-[#522730] dark:text-stone-300 hover:border-red-400'
+                      }`}
+                    >
+                      <span className="text-left leading-tight">{s.name}</span>
+                      <span className="text-red-700 dark:text-amber-400 font-bold tabular-nums whitespace-nowrap shrink-0">
+                        Rs. {formatPrice(s.price)}
+                      </span>
+                    </motion.button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -119,19 +128,26 @@ export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose })
                 Spice Level:
               </label>
               <div className="grid grid-cols-3 gap-2">
-                {item.spiceLevels.map((lvl) => (
-                  <button
-                    key={lvl}
-                    onClick={() => setSelectedSpice(lvl)}
-                    className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
-                      selectedSpice === lvl
-                        ? 'bg-amber-100 dark:bg-amber-500/20 border-amber-500 text-amber-900 dark:text-amber-300 font-bold'
-                        : 'bg-white dark:bg-[#0d0608] border-[#fbdad2] dark:border-[#3b171f] text-[#522730] dark:text-stone-400'
-                    }`}
-                  >
-                    {lvl}
-                  </button>
-                ))}
+                {item.spiceLevels.map((lvl) => {
+                  const isSelected = selectedSpice === lvl;
+                  return (
+                    <motion.button
+                      key={lvl}
+                      type="button"
+                      onClick={() => setSelectedSpice(lvl)}
+                      whileTap={{ scale: 0.95 }}
+                      animate={{ scale: isSelected ? 1.03 : 1 }}
+                      transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+                      className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-colors duration-200 ${
+                        isSelected
+                          ? 'bg-amber-100 dark:bg-amber-500/20 border-amber-500 text-amber-900 dark:text-amber-300 font-bold shadow-xs'
+                          : 'bg-white dark:bg-[#0d0608] border-[#fbdad2] dark:border-[#3b171f] text-[#522730] dark:text-stone-400 hover:border-amber-400/60'
+                      }`}
+                    >
+                      {lvl}
+                    </motion.button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -146,18 +162,22 @@ export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose })
                 {item.addons.map((addon) => {
                   const isChecked = selectedAddons.some((a) => a.name === addon.name);
                   return (
-                    <button
+                    <motion.button
                       key={addon.name}
+                      type="button"
                       onClick={() => toggleAddon(addon)}
-                      className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-xs transition-colors ${
+                      whileTap={{ scale: 0.98 }}
+                      animate={{ scale: isChecked ? 1.01 : 1 }}
+                      transition={{ type: 'spring', stiffness: 420, damping: 25 }}
+                      className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-xs transition-colors duration-200 ${
                         isChecked
-                          ? 'bg-rose-100 dark:bg-[#1f0c11] border-red-500 text-red-950 dark:text-white font-semibold'
+                          ? 'bg-rose-100 dark:bg-[#1f0c11] border-red-500 text-red-950 dark:text-white font-semibold shadow-xs'
                           : 'bg-white dark:bg-[#0d0608] border-[#fbdad2] dark:border-[#3b171f] text-[#522730] dark:text-stone-300 hover:bg-[#fff0ec] dark:hover:bg-[#1a0b0e]'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <span
-                          className={`w-4 h-4 rounded flex items-center justify-center border ${
+                          className={`w-4 h-4 rounded flex items-center justify-center border transition-colors duration-200 ${
                             isChecked
                               ? 'bg-red-600 border-red-500 text-white'
                               : 'border-stone-300 dark:border-stone-700'
@@ -167,10 +187,10 @@ export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose })
                         </span>
                         <span>{addon.name}</span>
                       </div>
-                      <span className="text-red-700 dark:text-amber-400 font-bold tabular-nums">
-                        +Rs. {addon.price}
+                      <span className="text-red-700 dark:text-amber-400 font-bold tabular-nums whitespace-nowrap">
+                        +Rs. {formatPrice(addon.price)}
                       </span>
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
@@ -216,17 +236,32 @@ export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose })
           </div>
 
           {/* Add to Cart CTA */}
-          <button
+          <motion.button
+            whileTap={{ scale: 0.97 }}
             onClick={handleAddToCart}
-            className="flex-1 flex items-center justify-between px-5 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white shadow-lg shadow-red-950/30 transition-all hover:scale-102"
+            className="flex-1 flex items-center justify-between px-5 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white shadow-lg shadow-red-950/30 transition-all"
           >
             <span>Add to Cart</span>
-            <span className="font-extrabold text-amber-300 tabular-nums">
-              Rs. {totalPrice}
-            </span>
-          </button>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={totalPrice}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 4 }}
+                transition={{ duration: 0.15 }}
+                className="font-extrabold text-amber-300 tabular-nums"
+              >
+                Rs. {formatPrice(totalPrice)}
+              </motion.span>
+            </AnimatePresence>
+          </motion.button>
         </div>
       </div>
     </div>
   );
+};
+
+export const CustomizeModal: React.FC<CustomizeModalProps> = ({ item, onClose }) => {
+  if (!item) return null;
+  return <CustomizeModalInner key={item.id} item={item} onClose={onClose} />;
 };

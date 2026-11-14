@@ -44,12 +44,8 @@ export const CustomerReviewsSection: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {REVIEWS.map((rev, idx) => (
-          <motion.div
+          <div
             key={idx}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
             className="p-6 rounded-2xl bg-white dark:bg-[#170b0e] border border-[#fbdad2] dark:border-[#3b171f] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-4"
           >
             <div className="space-y-3">
@@ -78,7 +74,7 @@ export const CustomerReviewsSection: React.FC = () => {
                 {rev.order}
               </span>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

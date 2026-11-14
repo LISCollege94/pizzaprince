@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../utils/format';
 import { X, Plus, Minus, Trash2, ArrowRight, MapPin, ShoppingBag, ShieldCheck } from 'lucide-react';
 
 export const CartDrawer: React.FC = () => {
@@ -55,7 +56,7 @@ export const CartDrawer: React.FC = () => {
             <MapPin className="w-4 h-4 text-red-600 shrink-0" />
             <div className="truncate">
               <p className="font-bold truncate text-[#1f0b0f] dark:text-white">
-                {selectedArea ? selectedArea.name : 'Surjani Town / 4K Chowrangi'}
+                {selectedArea ? selectedArea.name : 'Surjani Town, Karachi'}
               </p>
               <p className="text-[11px] text-[#804a55] dark:text-stone-500">
                 ~{effectiveDistance} km from ST 1 Surjani branch
@@ -155,7 +156,7 @@ export const CartDrawer: React.FC = () => {
                     </div>
 
                     <span className="font-bold text-red-700 dark:text-amber-400 tabular-nums">
-                      Rs. {item.totalPrice}
+                      Rs. {formatPrice(item.totalPrice)}
                     </span>
                   </div>
                 </div>
@@ -170,7 +171,7 @@ export const CartDrawer: React.FC = () => {
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between text-[#522730] dark:text-stone-400">
                 <span>Subtotal</span>
-                <span className="font-semibold text-[#1f0b0f] dark:text-stone-200 tabular-nums">Rs. {subtotal}</span>
+                <span className="font-semibold text-[#1f0b0f] dark:text-stone-200 tabular-nums">Rs. {formatPrice(subtotal)}</span>
               </div>
 
               {/* Delivery fee calculated automatically by distance */}
@@ -178,24 +179,24 @@ export const CartDrawer: React.FC = () => {
                 <span className="flex items-center gap-1">
                   <span>Delivery ({effectiveDistance} km)</span>
                   <span className="text-[10px] text-[#804a55] dark:text-stone-500">
-                    (4K Chowrangi base Rs. 100)
+                    (Doorstep Express)
                   </span>
                 </span>
                 <span className="font-semibold text-[#1f0b0f] dark:text-stone-200 tabular-nums">
-                  Rs. {deliveryFee}
+                  Rs. {formatPrice(deliveryFee)}
                 </span>
               </div>
 
               {discount > 0 && (
                 <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
-                  <span>Royal Family Discount (Subtotal ≥ Rs. 3000)</span>
-                  <span className="tabular-nums">-Rs. {discount}</span>
+                  <span>Royal Family Discount (Subtotal ≥ Rs. 3,000)</span>
+                  <span className="tabular-nums">-Rs. {formatPrice(discount)}</span>
                 </div>
               )}
 
               <div className="pt-2 border-t border-[#fbdad2] dark:border-[#3b171f] flex justify-between text-sm font-black text-[#1f0b0f] dark:text-white">
                 <span>Grand Total</span>
-                <span className="text-red-700 dark:text-amber-400 text-base tabular-nums">Rs. {total}</span>
+                <span className="text-red-700 dark:text-amber-400 text-base tabular-nums">Rs. {formatPrice(total)}</span>
               </div>
             </div>
 

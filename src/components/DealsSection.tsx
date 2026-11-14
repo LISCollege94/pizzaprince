@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { useCart } from '../context/CartContext';
 import { MenuItem } from '../types';
+import { formatPrice } from '../utils/format';
 import { Sparkles, Plus, Tag, Check, ArrowRight } from 'lucide-react';
 import { ASSETS } from '../constants/assets';
 
@@ -65,7 +66,7 @@ const DEALS: DealItem[] = [
 ];
 
 export const DealsSection: React.FC = () => {
-  const { addToCart } = useCart();
+  const { addToCart, cart } = useCart();
 
   const handleAddDeal = (deal: DealItem, e: React.MouseEvent<HTMLButtonElement>) => {
     const card = e.currentTarget.closest('.deal-card');
@@ -115,92 +116,109 @@ export const DealsSection: React.FC = () => {
 
       {/* Deals Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-        {DEALS.map((deal, idx) => (
-          <motion.div
-            key={deal.id}
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
-            transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
-            className="deal-card group relative flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#170b0e] border border-[#fbdad2] dark:border-[#3b171f] hover:border-red-500/70 shadow-sm dark:shadow-xl hover:shadow-2xl transition-all duration-300"
-          >
-            {/* Top Image Showcase */}
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-stone-950">
-              <img
-                src={deal.image}
-                onError={(e) => {
-                  e.currentTarget.src = '/images/pizza.jpg';
-                }}
-                alt={deal.name}
-                className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        {DEALS.map((deal) => {
+          const dealQty = cart
+            .filter((ci) => ci.menuItem.id === deal.id)
+            .reduce((sum, ci) => sum + ci.quantity, 0);
+          const isAdded = dealQty > 0;
 
-              {/* Discount Badge */}
-              <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-red-600 text-white font-black text-xs shadow-lg flex items-center gap-1">
-                <Tag className="w-3 h-3" />
-                <span>{deal.discountBadge}</span>
-              </div>
+          return (
+            <div
+              key={deal.id}
+              className="deal-card group relative flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#170b0e] border border-[#fbdad2] dark:border-[#3b171f] hover:border-red-500/70 shadow-sm dark:shadow-xl hover:shadow-2xl transition-all duration-300"
+            >
+              {/* Top Image Showcase */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-stone-950">
+                <img
+                  src={deal.image}
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/pizza.jpg';
+                  }}
+                  alt={deal.name}
+                  className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-              {/* Deal Name Overlay */}
-              <div className="absolute bottom-3 left-4 right-4">
-                <h3 className="text-lg font-black text-white drop-shadow">
-                  {deal.name}
-                </h3>
-              </div>
-            </div>
+                {/* Discount Badge */}
+                <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-red-600 text-white font-black text-xs shadow-lg flex items-center gap-1">
+                  <Tag className="w-3 h-3" />
+                  <span>{deal.discountBadge}</span>
+                </div>
 
-            {/* Deal Details & Included Items */}
-            <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
-                <p className="text-xs text-[#522730] dark:text-[#f4cdd4] leading-relaxed">
-                  {deal.description}
-                </p>
-
-                {/* Items Checklist */}
-                <div className="space-y-1.5 pt-2 border-t border-[#fbdad2]/60 dark:border-[#3b171f]/80">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#804a55] dark:text-stone-400">
-                    Combo Includes:
-                  </p>
-                  <ul className="space-y-1 text-xs text-[#522730] dark:text-[#f4cdd4]">
-                    {deal.includes.map((inc, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                        <span>{inc}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Deal Name Overlay */}
+                <div className="absolute bottom-3 left-4 right-4">
+                  <h3 className="text-lg font-black text-white drop-shadow">
+                    {deal.name}
+                  </h3>
                 </div>
               </div>
 
-              {/* Price and Add Deal Button */}
-              <div className="pt-4 border-t border-[#fbdad2] dark:border-[#3b171f] flex items-center justify-between gap-3">
-                <div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-black text-red-700 dark:text-amber-400 tabular-nums">
-                      Rs. {deal.price}
-                    </span>
-                    <span className="text-xs text-stone-400 line-through tabular-nums">
-                      Rs. {deal.originalPrice}
+              {/* Deal Details & Included Items */}
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <p className="text-xs text-[#522730] dark:text-[#f4cdd4] leading-relaxed">
+                    {deal.description}
+                  </p>
+
+                  {/* Items Checklist */}
+                  <div className="space-y-1.5 pt-2 border-t border-[#fbdad2]/60 dark:border-[#3b171f]/80">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#804a55] dark:text-stone-400">
+                      Combo Includes:
+                    </p>
+                    <ul className="space-y-1 text-xs text-[#522730] dark:text-[#f4cdd4]">
+                      {deal.includes.map((inc, i) => (
+                        <li key={i} className="flex items-center gap-2">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <span>{inc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Price and Add Deal Button */}
+                <div className="pt-4 border-t border-[#fbdad2] dark:border-[#3b171f] flex items-center justify-between gap-3">
+                  <div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xl font-black text-red-700 dark:text-amber-400 tabular-nums">
+                        Rs. {formatPrice(deal.price)}
+                      </span>
+                      <span className="text-xs text-stone-400 line-through tabular-nums">
+                        Rs. {formatPrice(deal.originalPrice)}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                      Special Combo Discount
                     </span>
                   </div>
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                    Special Combo Discount
-                  </span>
-                </div>
 
-                <button
-                  onClick={(e) => handleAddDeal(deal, e)}
-                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white shadow-md shadow-red-950/20 active:scale-95 transition-all shrink-0"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Add Deal</span>
-                </button>
+                  <motion.button
+                    whileTap={{ scale: 0.94 }}
+                    onClick={(e) => handleAddDeal(deal, e)}
+                    className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs text-white shadow-md transition-all duration-300 shrink-0 ${
+                      isAdded
+                        ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-950/20'
+                        : 'bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 shadow-red-950/20'
+                    }`}
+                  >
+                    {isAdded ? (
+                      <>
+                        <Check className="w-4 h-4 shrink-0" />
+                        <span>Added{dealQty > 1 ? ` (${dealQty})` : ''}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-4 h-4 shrink-0" />
+                        <span>Add Deal</span>
+                      </>
+                    )}
+                  </motion.button>
+                </div>
               </div>
             </div>
-          </motion.div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

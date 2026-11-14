@@ -37,11 +37,11 @@ export default function App() {
               {/* Hero Slider with 2s cycling animation & signboard banner */}
               <HeroSlider />
 
-              {/* Exclusive Combo Deals & Feasts */}
-              <DealsSection />
-
               {/* Royal Fast Food & Pizza Menu with upward scroll animation */}
               <MenuSection />
+
+              {/* Exclusive Combo Deals & Feasts */}
+              <DealsSection />
 
               {/* Neighborhood Customer Reviews & Proof */}
               <CustomerReviewsSection />

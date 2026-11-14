@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../utils/format';
 import { X, MapPin, Plus, Trash2, Award, LogOut, Compass } from 'lucide-react';
 import { KARACHI_AREAS } from '../data/karachiAreas';
 
@@ -145,7 +146,7 @@ export const CustomerDashboardModal: React.FC = () => {
                           <span>
                             {it.menuItem.name} x {it.quantity}
                           </span>
-                          <span className="text-[#804a55] dark:text-stone-400 tabular-nums">Rs. {it.totalPrice}</span>
+                          <span className="text-[#804a55] dark:text-stone-400 tabular-nums">Rs. {formatPrice(it.totalPrice)}</span>
                         </div>
                       ))}
                     </div>
@@ -154,7 +155,7 @@ export const CustomerDashboardModal: React.FC = () => {
                       <div>
                         <span className="text-[#804a55] dark:text-stone-400">Total: </span>
                         <span className="font-bold text-red-700 dark:text-amber-400 tabular-nums">
-                          Rs. {ord.total}
+                          Rs. {formatPrice(ord.total)}
                         </span>
                       </div>
 
@@ -297,7 +298,7 @@ export const CustomerDashboardModal: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="p-3.5 rounded-xl bg-white dark:bg-[#0d0608] border border-[#fbdad2] dark:border-[#3b171f] space-y-1">
                   <p className="font-bold text-[#1f0b0f] dark:text-white">Surjani Free Delivery Voucher</p>
-                  <p className="text-[#804a55] dark:text-stone-400 text-[11px]">Valid on orders above Rs. 1500</p>
+                  <p className="text-[#804a55] dark:text-stone-400 text-[11px]">Valid on orders above Rs. 1,500</p>
                   <span className="inline-block mt-1 font-mono text-[10px] text-red-700 dark:text-amber-400 font-bold bg-[#fff0ec] dark:bg-stone-900 px-2 py-0.5 rounded border border-[#fbdad2] dark:border-stone-800">
                     SURJANI100
                   </span>
@@ -305,7 +306,7 @@ export const CustomerDashboardModal: React.FC = () => {
 
                 <div className="p-3.5 rounded-xl bg-white dark:bg-[#0d0608] border border-[#fbdad2] dark:border-[#3b171f] space-y-1">
                   <p className="font-bold text-[#1f0b0f] dark:text-white">Crown Family Feast Discount</p>
-                  <p className="text-[#804a55] dark:text-stone-400 text-[11px]">Rs. 200 off on bill above Rs. 3000</p>
+                  <p className="text-[#804a55] dark:text-stone-400 text-[11px]">Rs. 200 off on bill above Rs. 3,000</p>
                   <span className="inline-block mt-1 font-mono text-[10px] text-emerald-700 dark:text-emerald-400 font-bold bg-[#fff0ec] dark:bg-stone-900 px-2 py-0.5 rounded border border-[#fbdad2] dark:border-stone-800">
                     AUTOMATIC
                   </span>
