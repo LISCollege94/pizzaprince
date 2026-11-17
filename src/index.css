@@ -71,3 +71,12 @@ html.dark {
 html:not(.dark) {
   color-scheme: light;
 }
+
+/* Hide scrollbars cleanly on horizontal carousel tracks */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

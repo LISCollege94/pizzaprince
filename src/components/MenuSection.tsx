@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useRef, useState } from 'react';
+import { motion, AnimatePresence, LayoutGroup } from 'motion/react';
 import { MENU_ITEMS } from '../data/menuData';
 import { MenuItem, MenuCategory } from '../types';
 import { useCart } from '../context/CartContext';
 import { CustomizeModal } from './CustomizeModal';
 import { formatPrice } from '../utils/format';
-import { Search, Plus, Check, SlidersHorizontal, Flame, X } from 'lucide-react';
+import { Search, Plus, Check, SlidersHorizontal, Flame, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const CATEGORIES: { id: MenuCategory; label: string; shortLabel: string; icon: string }[] = [
   { id: 'pizza', label: 'Crown Pizzas', shortLabel: 'Pizzas', icon: '🍕' },
@@ -21,6 +21,8 @@ export const MenuSection: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
   const { addToCart, cart } = useCart();
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const trimmedQuery = searchQuery.trim().toLowerCase();
 
@@ -39,9 +41,29 @@ export const MenuSection: React.FC = () => {
       })
     : MENU_ITEMS.filter((item) => item.category === activeCategory);
 
+  const centerCategoryButton = (catId: MenuCategory) => {
+    requestAnimationFrame(() => {
+      const track = trackRef.current;
+      const btn = tabRefs.current[catId];
+      if (!track || !btn) return;
+      const targetLeft = btn.offsetLeft - (track.clientWidth - btn.clientWidth) / 2;
+      track.scrollTo({
+        left: Math.max(0, targetLeft),
+        behavior: 'smooth',
+      });
+    });
+  };
+
   const handleCategorySelect = (catId: MenuCategory) => {
     setActiveCategory(catId);
     if (searchQuery) setSearchQuery('');
+    centerCategoryButton(catId);
+  };
+
+  const handleArrowStep = (direction: -1 | 1) => {
+    const currentIndex = CATEGORIES.findIndex((c) => c.id === activeCategory);
+    const nextIndex = (currentIndex + direction + CATEGORIES.length) % CATEGORIES.length;
+    handleCategorySelect(CATEGORIES[nextIndex].id);
   };
 
   const handleQuickAdd = (item: MenuItem, e: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,8 +81,8 @@ export const MenuSection: React.FC = () => {
 
   return (
     <section id="menu-section" className="pt-6 sm:pt-10 pb-12 sm:pb-16 px-2.5 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-      {/* Search Bar & Compact Category Selector */}
-      <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+      {/* Search Bar & Full-Width Animated Category Carousel */}
+      <div className="space-y-4 sm:space-y-5 mb-6 sm:mb-8">
         {/* Prominent Quick Search Input */}
         <div className="relative max-w-xl mx-auto">
           <Search className="w-4 h-4 absolute left-3.5 top-3 sm:top-3.5 text-[#804a55] dark:text-stone-400 pointer-events-none" />
@@ -85,49 +107,79 @@ export const MenuSection: React.FC = () => {
           )}
         </div>
 
-        {/* Compact Mobile Grid (3x2 so zero buttons cut off) + Centered Flex Track on Tablet/Desktop */}
-        <div className="grid grid-cols-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center gap-1.5 sm:gap-2.5 max-w-full">
-          {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat.id && !trimmedQuery;
+        {/* Full-Width Sliding Category Carousel with Left/Right Arrows */}
+        <LayoutGroup id="menu-category-tabs">
+          <div className="w-full flex items-center gap-1.5 sm:gap-3">
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.92 }}
+              onClick={() => handleArrowStep(-1)}
+              aria-label="Previous food category"
+              className="w-9 h-10 sm:w-11 sm:h-12 rounded-xl flex items-center justify-center bg-white dark:bg-[#170b0e] border border-[#fbdad2] dark:border-[#3b171f] text-[#522730] dark:text-[#f4cdd4] hover:border-red-500 hover:text-red-600 dark:hover:text-amber-400 shadow-xs transition-colors shrink-0"
+            >
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            </motion.button>
 
-            return (
-              <motion.button
-                key={cat.id}
-                type="button"
-                onClick={() => handleCategorySelect(cat.id)}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.94 }}
-                animate={{
-                  scale: isActive ? 1.02 : 1,
-                  y: isActive ? -1 : 0,
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 420,
-                  damping: 22,
-                }}
-                className={`relative flex items-center justify-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-extrabold whitespace-nowrap transition-colors duration-200 border ${
-                  isActive
-                    ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white border-amber-400 shadow-md shadow-red-950/30 ring-1 ring-amber-400/70'
-                    : 'bg-[#fff0ec] dark:bg-[#1a0b0e] text-[#522730] dark:text-[#f4cdd4] hover:bg-[#ffe6e0] dark:hover:bg-[#281116] border-[#fbdad2] dark:border-[#3b171f]'
-                }`}
-              >
-                <span className="text-xs sm:text-sm shrink-0">{cat.icon}</span>
-                <span className="sm:hidden truncate">{cat.shortLabel}</span>
-                <span className="hidden sm:inline">{cat.label}</span>
+            <div
+              ref={trackRef}
+              className="flex-1 flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar scroll-smooth py-1.5 px-0.5"
+            >
+              {CATEGORIES.map((cat) => {
+                const isActive = activeCategory === cat.id && !trimmedQuery;
 
-                {isActive && (
-                  <motion.span
-                    initial={{ scaleX: 0, opacity: 0 }}
-                    animate={{ scaleX: 1, opacity: 1 }}
-                    transition={{ duration: 0.25, ease: 'easeOut' }}
-                    className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-amber-300 rounded-full"
-                  />
-                )}
-              </motion.button>
-            );
-          })}
-        </div>
+                return (
+                  <motion.button
+                    key={cat.id}
+                    ref={(el) => {
+                      tabRefs.current[cat.id] = el;
+                    }}
+                    type="button"
+                    onClick={() => handleCategorySelect(cat.id)}
+                    whileHover={{ y: -1 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 420,
+                      damping: 26,
+                    }}
+                    className={`relative flex-1 min-w-[144px] sm:min-w-[195px] lg:min-w-[235px] flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-extrabold whitespace-nowrap shrink-0 border transition-colors duration-200 ${
+                      isActive
+                        ? 'text-white border-amber-400 shadow-md shadow-red-950/25'
+                        : 'bg-white dark:bg-[#1a0b0e] text-[#522730] dark:text-[#f4cdd4] hover:bg-[#fff0ec] dark:hover:bg-[#281116] border-[#fbdad2] dark:border-[#3b171f] hover:border-red-400/60'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="activeCategoryPill"
+                        transition={{
+                          type: 'spring',
+                          stiffness: 380,
+                          damping: 28,
+                        }}
+                        className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#c8102e] to-rose-600 ring-1 ring-amber-400/70 shadow-inner"
+                      />
+                    )}
+
+                    <span className="relative z-10 text-sm sm:text-base shrink-0">{cat.icon}</span>
+                    <span className="relative z-10">{cat.label}</span>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.92 }}
+              onClick={() => handleArrowStep(1)}
+              aria-label="Next food category"
+              className="w-9 h-10 sm:w-11 sm:h-12 rounded-xl flex items-center justify-center bg-white dark:bg-[#170b0e] border border-[#fbdad2] dark:border-[#3b171f] text-[#522730] dark:text-[#f4cdd4] hover:border-red-500 hover:text-red-600 dark:hover:text-amber-400 shadow-xs transition-colors shrink-0"
+            >
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </motion.button>
+          </div>
+        </LayoutGroup>
       </div>
 
       {/* Section Sub-Header */}
