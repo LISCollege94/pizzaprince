@@ -103,7 +103,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const timer = setTimeout(() => {
         setIsLocationModalOpen(true);
         localStorage.setItem('pizza_prince_location_prompted', 'true');
-      }, 700);
+      }, 2800);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -127,11 +127,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       }
     }
-    // Seed initial mock sample order for immediate tracking showcase
+    // Seed initial sample orders (active + delivered history)
     return [
       {
         id: 'PRINCE-1089',
-        date: 'Today, 25 mins ago',
+        date: '18 mins ago',
         items: [
           {
             cartId: 'item-demo-1',
@@ -141,13 +141,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
               category: 'pizza',
               price: 1350,
               description: 'Crown crust stuffed pockets with chicken tikka',
-              image: ASSETS.pizza,
+              image: ASSETS.menu.pizzaTikka,
             },
             selectedSize: { name: 'Medium 10"', price: 1350 },
             selectedSpice: 'Spicy',
+            selectedAddons: [{ name: 'Garlic Mayo Dip', price: 80 }],
             quantity: 1,
-            unitPrice: 1350,
-            totalPrice: 1350,
+            unitPrice: 1430,
+            totalPrice: 1430,
           },
           {
             cartId: 'item-demo-2',
@@ -157,17 +158,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
               category: 'loaded-fries',
               price: 550,
               description: 'Crinkle fries loaded with cheddar and tikka',
-              image: ASSETS.fries,
+              image: ASSETS.menu.friesLoaded,
             },
+            selectedSize: { name: 'Regular Platter', price: 550 },
+            selectedSpice: 'Spicy Tikka Kick',
             quantity: 1,
             unitPrice: 550,
             totalPrice: 550,
           },
         ],
-        subtotal: 1900,
+        subtotal: 1980,
         deliveryFee: 100,
         discount: 0,
-        total: 2000,
+        total: 2080,
         status: 'dispatched',
         customerName: 'Prince VIP Member',
         customerPhone: '0312-2274688',
@@ -178,6 +181,76 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         estimatedDeliveryTime: 'Arriving in ~12 mins',
         createdAt: Date.now() - 1000 * 60 * 18,
         riderName: 'Tariq Hussain (Scooter # KCH-4892)',
+        riderPhone: '0312-2274688',
+      },
+      {
+        id: 'PRINCE-1042',
+        date: 'Yesterday',
+        items: [
+          {
+            cartId: 'item-demo-3',
+            menuItem: {
+              id: 'pizza-fajita-sensation',
+              name: 'Fajita Sensation Pizza',
+              category: 'pizza',
+              price: 1290,
+              description: 'Tender fajita marinated chicken strips and crisp bell peppers',
+              image: ASSETS.menu.pizzaFajita,
+            },
+            selectedSize: { name: 'Large 13"', price: 1890 },
+            selectedSpice: 'Medium',
+            selectedAddons: [{ name: 'Extra Mozzarella Cheese', price: 200 }],
+            quantity: 1,
+            unitPrice: 2090,
+            totalPrice: 2090,
+            specialInstructions: 'Extra crispy crust please',
+          },
+          {
+            cartId: 'item-demo-4',
+            menuItem: {
+              id: 'burger-prince-zinger',
+              name: 'Prince Zinger Supreme Burger',
+              category: 'burgers',
+              price: 520,
+              description: 'Extra-crispy battered golden chicken thigh fillet with melted cheddar',
+              image: ASSETS.menu.burgerZinger,
+            },
+            selectedSize: { name: 'Single Fillet', price: 520 },
+            selectedSpice: 'Spicy Zinger',
+            quantity: 2,
+            unitPrice: 520,
+            totalPrice: 1040,
+          },
+          {
+            cartId: 'item-demo-5',
+            menuItem: {
+              id: 'drink-soft-drink',
+              name: 'Chilled Soft Drink (Coke / Sprite / Fanta)',
+              category: 'drinks',
+              price: 130,
+              description: 'Ice-cold carbonated beverage served fresh',
+              image: ASSETS.menu.drinkSoda,
+            },
+            selectedSize: { name: '1.5 Litre Family Bottle', price: 260 },
+            quantity: 1,
+            unitPrice: 260,
+            totalPrice: 260,
+          },
+        ],
+        subtotal: 3390,
+        deliveryFee: 100,
+        discount: 200,
+        total: 3290,
+        status: 'delivered',
+        customerName: 'Prince VIP Member',
+        customerPhone: '0312-2274688',
+        deliveryAddress: 'House 42, Sector 1-A, near 4K Chowrangi, Surjani Town, Karachi',
+        deliveryArea: '4K Chowrangi, Surjani',
+        paymentMethod: 'Cash on Delivery (COD)',
+        distanceKm: 2.0,
+        estimatedDeliveryTime: 'Delivered in 28 mins',
+        createdAt: Date.now() - 1000 * 60 * 60 * 26,
+        riderName: 'Kamran Ali (Scooter # KCH-3104)',
         riderPhone: '0312-2274688',
       },
     ];
@@ -247,6 +320,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     });
 
+    // Immediate cart button bump feedback
+    setCartBump(true);
+    const immediateBumpTimer = setTimeout(() => setCartBump(false), 450);
+
     // Flying animation logic
     if (options?.sourceElement) {
       const startRect = options.sourceElement.getBoundingClientRect();
@@ -267,6 +344,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setTimeout(() => {
         setFlyingItem(null);
+        clearTimeout(immediateBumpTimer);
         setCartBump(true);
         try {
           const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
@@ -287,11 +365,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } catch (e) {
           // Graceful fallback
         }
-        setTimeout(() => setCartBump(false), 500);
+        setTimeout(() => setCartBump(false), 450);
       }, 1600);
-    } else {
-      setCartBump(true);
-      setTimeout(() => setCartBump(false), 500);
     }
   };
 

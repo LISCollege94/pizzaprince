@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'motion/react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { ShoppingBag, Moon, Sun, MapPin, Phone, Compass } from 'lucide-react';
-import { RESTAURANT_LOCATION } from '../data/karachiAreas';
+import { ShoppingBag, Moon, Sun, MapPin, Compass, History } from 'lucide-react';
 import { ASSETS } from '../constants/assets';
 
 export const Navbar: React.FC = () => {
   const { totalItemsCount, setIsCartOpen, selectedArea, setIsLocationModalOpen, setIsTrackingModalOpen, cartBump } = useCart();
-  const { user, setIsAuthModalOpen, setIsDashboardOpen } = useAuth();
+  const { user, setIsAuthModalOpen, setIsDashboardOpen, setIsOrderHistoryOpen } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const prevCountRef = useRef(totalItemsCount);
+  const [counterBounceKey, setCounterBounceKey] = useState(0);
+
+  useEffect(() => {
+    if (totalItemsCount > prevCountRef.current) {
+      setCounterBounceKey((prev) => prev + 1);
+    }
+    prevCountRef.current = totalItemsCount;
+  }, [totalItemsCount]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full backdrop-blur-md bg-[#fff7f5]/95 dark:bg-[#0d0608]/95 border-b border-[#fbdad2] dark:border-[#3b171f] shadow-sm dark:shadow-2xl transition-colors duration-300">
@@ -75,10 +84,29 @@ export const Navbar: React.FC = () => {
             <Compass className="w-4 h-4 text-red-600 dark:text-amber-400" />
             <span>Track Order</span>
           </button>
+          <button
+            type="button"
+            onClick={() => setIsOrderHistoryOpen(true)}
+            className="hover:text-[#c8102e] dark:hover:text-amber-400 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 font-bold"
+          >
+            <History className="w-4 h-4 text-red-600 dark:text-amber-400" />
+            <span>Past Orders</span>
+          </button>
         </nav>
 
-        {/* Zone 3: Actions (Theme Toggle, Google Auth Profile with Google Logo, Cart CTA) */}
+        {/* Zone 3: Actions (Theme Toggle, Mobile Past Orders, Google Auth Profile, Cart CTA) */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          {/* Mobile Past Orders Button */}
+          <button
+            type="button"
+            onClick={() => setIsOrderHistoryOpen(true)}
+            aria-label="View past orders"
+            title="Past Orders & Receipts"
+            className="md:hidden p-2 rounded-lg text-[#522730] dark:text-amber-300 hover:text-[#c8102e] bg-[#fff0ec] dark:bg-[#1a0b0e] hover:bg-[#ffe6e0] dark:hover:bg-[#281116] border border-[#fbdad2] dark:border-[#3b171f] transition-all shrink-0"
+          >
+            <History className="w-4 h-4 text-red-600 dark:text-amber-400" />
+          </button>
+
           {/* Theme Toggle (Changes entire website between 10% creamy red and 60% black/red obsidian) */}
           <button
             onClick={toggleTheme}
@@ -139,9 +167,20 @@ export const Navbar: React.FC = () => {
             <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 shrink-0" />
             <span className="hidden xs:inline sm:inline">Cart</span>
             {totalItemsCount > 0 && (
-              <span className="inline-flex items-center justify-center px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs font-extrabold bg-amber-400 text-red-950 rounded-full shadow">
+              <motion.span
+                key={counterBounceKey}
+                initial={{ scale: 1.38, y: -5 }}
+                animate={{ scale: 1, y: 0 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 520,
+                  damping: 14,
+                  mass: 0.75,
+                }}
+                className="inline-flex items-center justify-center px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs font-extrabold bg-amber-400 text-red-950 rounded-full shadow tabular-nums"
+              >
                 {totalItemsCount}
-              </span>
+              </motion.span>
             )}
           </button>
         </div>

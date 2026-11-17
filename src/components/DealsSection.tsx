@@ -55,7 +55,7 @@ const DEALS: DealItem[] = [
     originalPrice: 1750,
     discountBadge: 'Save Rs. 260',
     description: 'Crispy pressure-fried chicken broast quarters combined with spicy glazed buffalo chicken wings.',
-    image: ASSETS.fries,
+    image: ASSETS.menu.broast,
     includes: [
       '4x Golden Fried Broast Pieces (Half)',
       '6x Spicy Buffalo Crispy Wings',

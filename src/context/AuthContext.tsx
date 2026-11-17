@@ -12,6 +12,8 @@ interface AuthContextType {
   setIsAuthModalOpen: (open: boolean) => void;
   isDashboardOpen: boolean;
   setIsDashboardOpen: (open: boolean) => void;
+  isOrderHistoryOpen: boolean;
+  setIsOrderHistoryOpen: (open: boolean) => void;
   addLoyaltyPoints: (points: number) => void;
 }
 
@@ -64,6 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+  const [isOrderHistoryOpen, setIsOrderHistoryOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -152,6 +155,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsAuthModalOpen,
         isDashboardOpen,
         setIsDashboardOpen,
+        isOrderHistoryOpen,
+        setIsOrderHistoryOpen,
         addLoyaltyPoints,
       }}
     >

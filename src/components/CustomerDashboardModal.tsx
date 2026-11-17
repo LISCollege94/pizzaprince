@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/format';
-import { X, MapPin, Plus, Trash2, Award, LogOut, Compass } from 'lucide-react';
+import { X, MapPin, Plus, Trash2, Award, LogOut, Compass, Receipt } from 'lucide-react';
 import { KARACHI_AREAS } from '../data/karachiAreas';
 
 export const CustomerDashboardModal: React.FC = () => {
-  const { user, isDashboardOpen, setIsDashboardOpen, signOut, addSavedAddress, removeSavedAddress } = useAuth();
+  const { user, isDashboardOpen, setIsDashboardOpen, setIsOrderHistoryOpen, signOut, addSavedAddress, removeSavedAddress } = useAuth();
   const { orders, setActiveTrackingOrder, setIsTrackingModalOpen } = useCart();
 
   const [activeTab, setActiveTab] = useState<'orders' | 'addresses' | 'rewards'>('orders');
@@ -118,6 +118,22 @@ export const CustomerDashboardModal: React.FC = () => {
         <div className="p-6 overflow-y-auto space-y-4 flex-1">
           {activeTab === 'orders' && (
             <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2 pb-1">
+                <p className="text-xs text-[#804a55] dark:text-stone-400">
+                  Recent orders placed with {user.email}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsDashboardOpen(false);
+                    setIsOrderHistoryOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#fff0ec] dark:bg-[#1a0b0e] hover:bg-[#ffe6e0] dark:hover:bg-[#281116] text-red-700 dark:text-amber-400 border border-[#fbdad2] dark:border-[#3b171f] text-xs font-bold whitespace-nowrap transition-colors"
+                >
+                  <Receipt className="w-3.5 h-3.5" />
+                  <span>Full Order History</span>
+                </button>
+              </div>
               {orders.length === 0 ? (
                 <div className="text-center py-10 text-[#804a55] dark:text-stone-500 text-xs">
                   No orders placed yet. Your royal feasts will show up here!

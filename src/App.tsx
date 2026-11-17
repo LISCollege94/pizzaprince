@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { SplashScreen } from './components/SplashScreen';
 import { Navbar } from './components/Navbar';
 import { HeroSlider } from './components/HeroSlider';
 import { DealsSection } from './components/DealsSection';
@@ -19,15 +20,19 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { OrderTrackingModal } from './components/OrderTrackingModal';
 import { GoogleAuthModal } from './components/GoogleAuthModal';
 import { CustomerDashboardModal } from './components/CustomerDashboardModal';
+import { OrderHistoryModal } from './components/OrderHistoryModal';
 import { FlyingCartItem } from './components/FlyingCartItem';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { Footer } from './components/Footer';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
     <ThemeProvider>
       <AuthProvider>
         <CartProvider>
+          <SplashScreen isVisible={showSplash} onFinish={() => setShowSplash(false)} />
           <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#fff7f5] dark:bg-[#0d0608] text-[#1f0b0f] dark:text-[#fff1f3] transition-colors duration-300 flex flex-col font-sans selection:bg-red-600 selection:text-white">
             {/* Top Navigation Bar */}
             <Navbar />
@@ -76,6 +81,9 @@ export default function App() {
 
             {/* Customer VIP Profile & Saved Addresses Dashboard */}
             <CustomerDashboardModal />
+
+            {/* Dedicated Past Orders & Receipts History Modal */}
+            <OrderHistoryModal />
           </div>
         </CartProvider>
       </AuthProvider>

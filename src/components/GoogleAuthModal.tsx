@@ -19,7 +19,7 @@ export const GoogleAuthModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
       <div className="relative w-full max-w-md rounded-2xl bg-[#fff7f5] dark:bg-[#12070a] border border-[#fbdad2] dark:border-[#3b171f] text-[#1f0b0f] dark:text-stone-100 shadow-2xl overflow-hidden transition-colors duration-300">
         {/* Header */}
         <div className="p-6 bg-[#fff0ec] dark:bg-[#0d0608] border-b border-[#fbdad2] dark:border-[#3b171f] text-center relative">

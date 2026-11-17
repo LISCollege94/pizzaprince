@@ -22,17 +22,22 @@ export const MenuSection: React.FC = () => {
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
   const { addToCart, cart } = useCart();
 
-  const filteredItems = MENU_ITEMS.filter((item) => {
-    if (searchQuery.trim().length > 0) {
-      const q = searchQuery.toLowerCase();
-      return (
-        item.name.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q)
-      );
-    }
-    return item.category === activeCategory;
-  });
+  const trimmedQuery = searchQuery.trim().toLowerCase();
+
+  const filteredItems = trimmedQuery.length > 0
+    ? MENU_ITEMS.filter((item) => {
+        const catMeta = CATEGORIES.find((c) => c.id === item.category);
+        return (
+          item.name.toLowerCase().includes(trimmedQuery) ||
+          item.category.toLowerCase().includes(trimmedQuery) ||
+          (catMeta && catMeta.label.toLowerCase().includes(trimmedQuery))
+        );
+      }).sort((a, b) => {
+        const aNameMatch = a.name.toLowerCase().includes(trimmedQuery) ? 0 : 1;
+        const bNameMatch = b.name.toLowerCase().includes(trimmedQuery) ? 0 : 1;
+        return aNameMatch - bNameMatch;
+      })
+    : MENU_ITEMS.filter((item) => item.category === activeCategory);
 
   const handleCategorySelect = (catId: MenuCategory) => {
     setActiveCategory(catId);
@@ -58,18 +63,21 @@ export const MenuSection: React.FC = () => {
       <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
         {/* Prominent Quick Search Input */}
         <div className="relative max-w-xl mx-auto">
-          <Search className="w-4 h-4 absolute left-3.5 top-3 text-[#804a55] dark:text-stone-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-3 sm:top-3.5 text-[#804a55] dark:text-stone-400 pointer-events-none" />
           <input
+            id="menu-search-input"
             type="text"
-            placeholder="Search Crown Pizza, Zinger Burger, Broast, Loaded Fries..."
+            aria-label="Search pizza and fast food items by name"
+            placeholder="Search pizza or fast food by name (e.g. Tikka, Zinger, Broast, Fries)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-10 py-2.5 sm:py-3 text-xs sm:text-sm bg-white dark:bg-[#170b0e] border border-[#fbdad2] dark:border-[#3b171f] rounded-2xl text-[#1f0b0f] dark:text-white placeholder-[#804a55] dark:placeholder-stone-500 shadow-xs sm:shadow-sm focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
           />
           {searchQuery && (
             <button
+              type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-2.5 p-0.5 rounded-full text-[#804a55] hover:text-red-600 dark:text-stone-400"
+              className="absolute right-3 top-2 sm:top-2.5 p-1 rounded-full text-[#804a55] hover:text-red-600 dark:text-stone-400 dark:hover:text-white transition-colors"
               aria-label="Clear search query"
             >
               <X className="w-4 h-4" />
@@ -80,7 +88,7 @@ export const MenuSection: React.FC = () => {
         {/* Compact Mobile Grid (3x2 so zero buttons cut off) + Centered Flex Track on Tablet/Desktop */}
         <div className="grid grid-cols-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center gap-1.5 sm:gap-2.5 max-w-full">
           {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat.id && !searchQuery.trim();
+            const isActive = activeCategory === cat.id && !trimmedQuery;
 
             return (
               <motion.button
@@ -123,33 +131,54 @@ export const MenuSection: React.FC = () => {
       </div>
 
       {/* Section Sub-Header */}
-      <div className="flex items-center justify-between pb-3 sm:pb-4 mb-4 border-b border-[#fbdad2]/60 dark:border-[#3b171f]/80">
-        <div className="flex items-center gap-2">
-          <Flame className="w-4 h-4 text-red-600" />
-          <h2 className="text-base sm:text-xl font-black text-[#1f0b0f] dark:text-white tracking-tight">
-            {searchQuery
-              ? `Search Results for "${searchQuery}"`
+      <div className="flex items-center justify-between gap-2 pb-3 sm:pb-4 mb-4 border-b border-[#fbdad2]/60 dark:border-[#3b171f]/80">
+        <div className="flex items-center gap-2 min-w-0">
+          <Flame className="w-4 h-4 text-red-600 shrink-0" />
+          <h2 className="text-base sm:text-xl font-black text-[#1f0b0f] dark:text-white tracking-tight truncate">
+            {trimmedQuery
+              ? `Search Results for "${searchQuery.trim()}"`
               : CATEGORIES.find((c) => c.id === activeCategory)?.label || 'Royal Menu'}
           </h2>
         </div>
-        <span className="text-[11px] sm:text-xs font-bold text-[#804a55] dark:text-stone-400 tabular-nums">
-          {filteredItems.length} items available
-        </span>
+        <div className="flex items-center gap-2.5 shrink-0">
+          {trimmedQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="text-[11px] sm:text-xs font-bold text-red-600 dark:text-amber-400 hover:underline whitespace-nowrap"
+            >
+              Clear search
+            </button>
+          )}
+          <span className="text-[11px] sm:text-xs font-bold text-[#804a55] dark:text-stone-400 tabular-nums whitespace-nowrap">
+            {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
+          </span>
+        </div>
       </div>
 
       {/* Menu Cards Grid - Smooth Category Switch Animation & 2 Columns on Mobile */}
       {filteredItems.length === 0 ? (
-        <div className="text-center py-16 bg-[#fff0ec] dark:bg-[#170b0e] rounded-2xl border border-[#fbdad2] dark:border-[#3b171f]">
-          <p className="text-[#804a55] dark:text-stone-400 text-xs sm:text-sm">No items found matching your search.</p>
+        <div className="text-center py-14 px-4 bg-[#fff0ec] dark:bg-[#170b0e] rounded-2xl border border-[#fbdad2] dark:border-[#3b171f] space-y-3">
+          <p className="text-[#522730] dark:text-stone-300 text-xs sm:text-sm font-semibold">
+            No pizza or fast food items matched &ldquo;{searchQuery.trim()}&rdquo;.
+          </p>
+          <button
+            type="button"
+            onClick={() => setSearchQuery('')}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition-colors"
+          >
+            <X className="w-3.5 h-3.5" />
+            <span>Reset Search</span>
+          </button>
         </div>
       ) : (
         <AnimatePresence mode="wait">
           <motion.div
-            key={searchQuery.trim() ? `search-${searchQuery}` : activeCategory}
+            key={trimmedQuery ? 'search-results' : activeCategory}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
             className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-5 lg:gap-8"
           >
             {filteredItems.map((item) => {
